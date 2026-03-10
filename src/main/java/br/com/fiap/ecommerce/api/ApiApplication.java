@@ -1,4 +1,4 @@
-package br.com.fiap_ecommerce.api.api;
+package br.com.fiap.ecommerce.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

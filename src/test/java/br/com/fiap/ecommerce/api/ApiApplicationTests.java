@@ -1,4 +1,4 @@
-package br.com.fiap_ecommerce.api.api;
+package br.com.fiap.ecommerce.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
