@@ -1,6 +1,7 @@
 package br.com.fiap.ecommerce.api.categoria;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,18 +13,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-
 public class Categoria {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String descricao;
+    private int ativo;
 
-    public Categoria (DadosCadastroCategoria dados) {
+    public Categoria(DadosCadastroCategoria dados) {
         this.nome = dados.nome();
         this.descricao = dados.descricao();
+        this.ativo = 1;
     }
 
+    public void atualizarCategoria(@Valid DadosAtualizarCategoria dados) {
+        if (dados.nome() != null)
+            this.nome = dados.nome();
+        if (dados.descricao() != null)
+            this.descricao = dados.descricao();
+    }
+
+    public void excluirCategoria() {
+        this.ativo = 0;
+    }
 }
