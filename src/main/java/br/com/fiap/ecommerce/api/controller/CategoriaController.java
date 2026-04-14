@@ -27,19 +27,22 @@ public class CategoriaController {
     @PostMapping //recebe as requisições do tipo POST
     //Recebe o conteúdo de Body e garante que é válido conforme as retrições do DTO
     public ResponseEntity<DadosDetalhamentoCategoria> cadastrarCategoria(@RequestBody @Valid DadosCadastroCategoria dados, UriComponentsBuilder uriBuilder) {
-        var categoria = new Categoria(dados);
-        categoriaRepository.save(categoria);
+        var categoria = new Categoria(dados); // cria uma categoria baseada nos dados do body
+        categoriaRepository.save(categoria); // salva a categoria no BD
 
+        // cria um endereço de rota contendo o id da categoria recém-criada
         var uri = uriBuilder.path("/categorias/{id}").buildAndExpand(categoria.getId()).toUri();
 
+        // devolve um objeto de response e a categoria criada como body
         return ResponseEntity.created(uri).body(new DadosDetalhamentoCategoria(categoria));
     }
 
     @GetMapping //recebe as requisições do tipo GET
+    // Importar Page e Pageable do spring
     public ResponseEntity<Page<DadosListagemCategoria>> listarCategorias(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
         var page = categoriaRepository.findAllByAtivoTrue(paginacao)
                 .map(DadosListagemCategoria::new);
-        return ResponseEntity.ok(page);
+        return ResponseEntity.ok(page); // retorno de status 200 ok
     }
 
     @GetMapping("/{id}")
@@ -47,8 +50,8 @@ public class CategoriaController {
         Categoria categoria = categoriaRepository.findByIdAndAtivoTrue(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Categoria não existe"
-                ));
-        return ResponseEntity.ok(new DadosDetalhamentoCategoria(categoria));
+                )); // retorna erro de categoria não existe, caso não exista ou esteja inativa
+        return ResponseEntity.ok(new DadosDetalhamentoCategoria(categoria)); // retorno de status 200 ok
     }
 
     @PutMapping
@@ -57,6 +60,7 @@ public class CategoriaController {
         var categoria = categoriaRepository.getReferenceById(dados.id());
         categoria.atualizarCategoria(dados);
 
+        // retorno de status 200 ok e todos os dados da categoria modificada
         return ResponseEntity.ok(new DadosDetalhamentoCategoria(categoria));
     }
 
@@ -67,6 +71,6 @@ public class CategoriaController {
         var categoria = categoriaRepository.getReferenceById(id);
         categoria.excluirCategoria();
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build(); // retorna status 204 No content
     }
 }
