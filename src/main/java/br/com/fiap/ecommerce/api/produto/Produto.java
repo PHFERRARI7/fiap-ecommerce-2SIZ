@@ -2,6 +2,7 @@ package br.com.fiap.ecommerce.api.produto;
 
 import br.com.fiap.ecommerce.api.categoria.Categoria;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -42,4 +43,39 @@ public class Produto {
     private int ativo;
 
 
+    public Produto(DadosCadastroProduto dados, Categoria categoria) {
+        this.nome = dados.nome();
+        this.preco = dados.preco();
+        this.sku = dados.sku();
+        this.descricao = dados.descricao();
+        this.estoque = dados.estoque();
+        this.categoria = categoria;
+        this. ativo = 1;
+    }
+
+    public void excluirProduto() {
+        this.ativo = 0;
+    }
+
+    public void atualizarProduto(DadosAtualizarProduto dados, Categoria categoria) {
+        if (dados.nome() != null && !dados.nome().isBlank()) {
+            this.nome = dados.nome();
+        }
+        if (dados.preco() != null) {
+            this.preco = dados.preco();
+        }
+        if (dados.sku() != null && !dados.sku().isBlank()) {
+            this.sku = dados.sku();
+        }
+
+        if (dados.descricao() != null && !dados.descricao().isBlank()) {
+            this.descricao = dados.descricao();
+        }
+        if (dados.estoque()!= null) {
+            this.estoque = dados.estoque();
+        }
+        if (categoria != null) {
+            this.categoria = categoria;
+        }
+    }
 }
